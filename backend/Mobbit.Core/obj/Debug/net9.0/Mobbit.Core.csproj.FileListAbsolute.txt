@@ -1,0 +1,11 @@
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.AssemblyInfoInputs.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.AssemblyInfo.cs
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.csproj.CoreCompileInputs.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\bin\Debug\net9.0\Mobbit.Core.deps.json
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\bin\Debug\net9.0\Mobbit.Core.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\bin\Debug\net9.0\Mobbit.Core.pdb
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\refint\Mobbit.Core.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\Mobbit.Core.pdb
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Core\obj\Debug\net9.0\ref\Mobbit.Core.dll

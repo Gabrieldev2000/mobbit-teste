@@ -1,0 +1,17 @@
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.AssemblyInfo.cs
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Infrastructure.deps.json
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Infrastructure.runtimeconfig.json
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Infrastructure.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Infrastructure.pdb
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Core.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\bin\Debug\net9.0\Mobbit.Core.pdb
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.I.C8160799.Up2Date
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\refint\Mobbit.Infrastructure.dll
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.pdb
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\Mobbit.Infrastructure.genruntimeconfig.cache
+C:\Users\elbri\OneDrive\Documentos\mobbit\backend\Mobbit.Infrastructure\obj\Debug\net9.0\ref\Mobbit.Infrastructure.dll
