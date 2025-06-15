@@ -1,0 +1,109 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Contratos</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filtros-container">
+        <mat-form-field>
+          <mat-label>Operadora</mat-label>
+          <mat-select [(ngModel)]="filtroOperadoraId" (selectionChange)="aplicarFiltros()">
+            <mat-option [value]="null">Todas</mat-option>
+            <mat-option *ngFor="let operadora of operadoras" [value]="operadora.id">
+              {{operadora.nome}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="filtroStatus" (selectionChange)="aplicarFiltros()">
+            <mat-option [value]="null">Todos</mat-option>
+            <mat-option [value]="StatusContrato.ATIVO">{{StatusContratoLabels[StatusContrato.ATIVO]}}</mat-option>
+            <mat-option [value]="StatusContrato.INATIVO">{{StatusContratoLabels[StatusContrato.INATIVO]}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button *ngIf="temFiltrosAtivos()" (click)="limparFiltros()">
+          Limpar
+        </button>
+      </div>
+
+      <table mat-table [dataSource]="contratos" class="mat-elevation-z8">
+        <!-- Nome Filial Column -->
+        <ng-container matColumnDef="nomeFilial">
+          <th mat-header-cell *matHeaderCellDef>Filial</th>
+          <td mat-cell *matCellDef="let contrato">{{contrato.nomeFilial}}</td>
+        </ng-container>
+
+        <!-- Operadora Column -->
+        <ng-container matColumnDef="operadora">
+          <th mat-header-cell *matHeaderCellDef>Operadora</th>
+          <td mat-cell *matCellDef="let contrato">{{contrato.operadora?.nome || 'N/A'}}</td>
+        </ng-container>
+
+        <!-- Plano Contratado Column -->
+        <ng-container matColumnDef="planoContratado">
+          <th mat-header-cell *matHeaderCellDef>Plano</th>
+          <td mat-cell *matCellDef="let contrato">{{contrato.planoContratado}}</td>
+        </ng-container>
+
+        <!-- Data Início Column -->
+        <ng-container matColumnDef="dataInicio">
+          <th mat-header-cell *matHeaderCellDef>Início</th>
+          <td mat-cell *matCellDef="let contrato">{{formatarData(contrato.dataInicio)}}</td>
+        </ng-container>
+
+        <!-- Data Vencimento Column -->
+        <ng-container matColumnDef="dataVencimento">
+          <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+          <td mat-cell *matCellDef="let contrato">{{formatarData(contrato.dataVencimento)}}</td>
+        </ng-container>
+
+        <!-- Valor Mensal Column -->
+        <ng-container matColumnDef="valorMensal">
+          <th mat-header-cell *matHeaderCellDef>Valor Mensal</th>
+          <td mat-cell *matCellDef="let contrato">{{formatarValor(contrato.valorMensal)}}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let contrato">
+            <span [ngClass]="{
+              'status-badge': true,
+              'status-ativo': contrato.status === StatusContrato.ATIVO,
+              'status-inativo': contrato.status === StatusContrato.INATIVO
+            }">{{getStatusLabel(contrato.status)}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Ações Column -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let contrato">
+            <div class="acoes-container">
+              <button mat-stroked-button [routerLink]="['/contratos/editar', contrato.id]">
+                Editar
+            </button>
+              <button mat-stroked-button color="warn" (click)="excluirContrato(contrato)">
+                Excluir
+            </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" routerLink="/contratos/novo">
+        Novo Contrato
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

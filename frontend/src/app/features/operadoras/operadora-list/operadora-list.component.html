@@ -1,0 +1,90 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Operadoras</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filtros-container">
+        <mat-form-field>
+          <mat-label>Tipo de Serviço</mat-label>
+          <mat-select [(ngModel)]="filtroTipoServico" (selectionChange)="aplicarFiltros()" multiple>
+            <mat-option [value]="TipoServico.None">Todos</mat-option>
+            <mat-option *ngFor="let tipo of getTipoServicoValues()" [value]="tipo">
+              {{TipoServicoLabels[tipo]}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox [(ngModel)]="filtroAtivas" (change)="aplicarFiltros()">Somente Ativas</mat-checkbox>
+
+        <button mat-stroked-button *ngIf="temFiltrosAtivos()" (click)="limparFiltros()">
+          Limpar
+        </button>
+      </div>
+
+      <table mat-table [dataSource]="operadoras" class="mat-elevation-z8">
+        <!-- Nome Column -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>Nome</th>
+          <td mat-cell *matCellDef="let operadora">{{operadora.nome}}</td>
+        </ng-container>
+
+        <!-- CNPJ Column -->
+        <ng-container matColumnDef="cnpj">
+          <th mat-header-cell *matHeaderCellDef>CNPJ</th>
+          <td mat-cell *matCellDef="let operadora">{{operadora.cnpj}}</td>
+        </ng-container>
+
+        <!-- Tipo de Serviço Column -->
+        <ng-container matColumnDef="tipoServico">
+          <th mat-header-cell *matHeaderCellDef>Tipo de Serviço</th>
+          <td mat-cell *matCellDef="let operadora">{{operadora.tipoServico | tipoServico}}</td>
+        </ng-container>
+
+        <!-- Contato Suporte Column -->
+        <ng-container matColumnDef="contatoSuporte">
+          <th mat-header-cell *matHeaderCellDef>Contato Suporte</th>
+          <td mat-cell *matCellDef="let operadora">{{operadora.contatoSuporte}}</td>
+        </ng-container>
+
+        <!-- Ativo Column -->
+        <ng-container matColumnDef="ativo">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let operadora">
+            <span [ngClass]="{
+              'status-badge': true,
+              'status-ativo': operadora.ativo === true,
+              'status-inativo': operadora.ativo === false
+            }">{{operadora.ativo ? 'Ativo' : 'Inativo'}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Ações Column -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let operadora">
+            <div class="acoes-container">
+              <button mat-stroked-button [routerLink]="['/operadoras/editar', operadora.id]">
+                Editar
+              </button>
+              <button mat-stroked-button color="warn" (click)="excluirOperadora(operadora)">
+                Excluir
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" routerLink="/operadoras/novo">
+        Nova Operadora
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

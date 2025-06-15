@@ -1,0 +1,87 @@
+<div class="container">
+  <mat-grid-list cols="4" rowHeight="100px" gutterSize="16px">
+    <!-- Total de Faturas -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <span class="card-title">Total de Faturas</span>
+              <span class="card-value">{{carregando ? '...' : totalFaturas}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Total de Contratos -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <span class="card-title">Total de Contratos</span>
+              <span class="card-value">{{carregando ? '...' : totalContratos}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Total de Operadoras -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <span class="card-title">Total de Operadoras</span>
+              <span class="card-value">{{carregando ? '...' : totalOperadoras}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Faturas Pendentes -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <span class="card-title">Faturas Pendentes</span>
+              <span class="card-value">{{carregando ? '...' : faturasPendentes}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <div class="charts-container">
+    <!-- Gráfico de Faturas por Status -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Faturas por Status</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-loading" *ngIf="carregando">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <canvas id="statusChart"></canvas>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Gráfico de Faturas por Mês -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Faturas por Mês</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-loading" *ngIf="carregando">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <canvas id="mensalChart"></canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
