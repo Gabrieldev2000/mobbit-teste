@@ -22,6 +22,7 @@ namespace Mobbit.Infrastructure.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Nome).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Cnpj).HasMaxLength(14);
                 entity.Property(e => e.ContatoSuporte).HasMaxLength(100);
             });
 
@@ -34,7 +35,7 @@ namespace Mobbit.Infrastructure.Data
                 entity.HasOne(e => e.Operadora)
                     .WithMany()
                     .HasForeignKey(e => e.OperadoraId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Fatura>(entity =>
@@ -48,4 +49,4 @@ namespace Mobbit.Infrastructure.Data
             });
         }
     }
-} 
+}

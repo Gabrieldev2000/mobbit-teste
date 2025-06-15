@@ -27,5 +27,25 @@ namespace Mobbit.Infrastructure.Repositories
                 .Where(o => o.Ativo)
                 .ToListAsync();
         }
+
+        public async Task DeleteAsync(Operadora operadora)
+        {
+            _context.Operadoras.Remove(operadora);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ExistsByCnpjAsync(string cnpj, int? id = null)
+        {
+            if (id.HasValue)
+            {
+                return await _context.Operadoras.AnyAsync(o => o.Cnpj == cnpj && o.Id != id.Value);
+            }
+            return await _context.Operadoras.AnyAsync(o => o.Cnpj == cnpj);
+        }
+
+        public async Task<bool> HasActiveContratosAsync(int operadoraId)
+        {
+            return await _context.Contratos.AnyAsync(c => c.OperadoraId == operadoraId && c.Status == StatusContrato.Ativo);
+        }
     }
-} 
+}

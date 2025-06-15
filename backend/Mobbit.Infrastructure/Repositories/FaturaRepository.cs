@@ -15,6 +15,14 @@ namespace Mobbit.Infrastructure.Repositories
         {
         }
 
+        public async Task<IEnumerable<Fatura>> GetAllWithContratoAsync()
+        {
+            return await _dbSet
+                .Include(f => f.Contrato)
+                .ThenInclude(c => c.Operadora)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Fatura>> GetByContratoAsync(int contratoId)
         {
             return await _dbSet
@@ -61,5 +69,13 @@ namespace Mobbit.Infrastructure.Repositories
 
             return distribuicao.ToDictionary(x => x.Status, x => x.Quantidade);
         }
+
+        public async Task<Fatura> GetByIdWithContratoAsync(int id)
+        {
+            return await _dbSet
+                .Include(f => f.Contrato)
+                .ThenInclude(c => c.Operadora)
+                .FirstOrDefaultAsync(f => f.Id == id);
+        }
     }
-} 
+}

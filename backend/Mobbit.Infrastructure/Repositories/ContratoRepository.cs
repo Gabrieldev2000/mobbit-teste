@@ -15,6 +15,20 @@ namespace Mobbit.Infrastructure.Repositories
         {
         }
 
+        public async Task<IEnumerable<Contrato>> GetAllWithOperadoraAsync()
+        {
+            return await _dbSet
+                .Include(c => c.Operadora)
+                .ToListAsync();
+        }
+
+        public async Task<Contrato> GetByIdWithOperadoraAsync(int id)
+        {
+            return await _dbSet
+                .Include(c => c.Operadora)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<IEnumerable<Contrato>> GetByOperadoraAsync(int operadoraId)
         {
             return await _dbSet
@@ -46,9 +60,9 @@ namespace Mobbit.Infrastructure.Repositories
             var fimMes = inicioMes.AddMonths(1).AddDays(-1);
 
             return await _dbSet
-                .Where(c => c.DataInicio <= fimMes && 
+                .Where(c => c.DataInicio <= fimMes &&
                            (c.DataVencimento >= inicioMes || c.Status == StatusContrato.Ativo))
                 .SumAsync(c => c.ValorMensal);
         }
     }
-} 
+}

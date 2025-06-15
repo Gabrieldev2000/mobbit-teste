@@ -1,45 +1,84 @@
-using Mobbit.Core.Interfaces;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Mobbit.Core.Entities;
+using Mobbit.Core.Interfaces;
+using System.Net.Mail;
+using System.Net;
 
 namespace Mobbit.Infrastructure.Services
 {
     public class NotificacaoService : INotificacaoService
     {
-        private readonly IContratoRepository _contratoRepository;
-        private readonly IFaturaRepository _faturaRepository;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
+        private readonly string _smtpServer;
+        private readonly int _smtpPort;
+        private readonly string _smtpUsername;
+        private readonly string _smtpPassword;
+        private readonly string _smtpFrom;
 
         public NotificacaoService(
-            IContratoRepository contratoRepository,
-            IFaturaRepository faturaRepository)
+            IServiceScopeFactory scopeFactory,
+            IConfiguration configuration)
         {
-            _contratoRepository = contratoRepository;
-            _faturaRepository = faturaRepository;
+            _scopeFactory = scopeFactory;
+            _configuration = configuration;
+
+            _smtpServer = _configuration["Email:SmtpServer"];
+            _smtpPort = int.Parse(_configuration["Email:SmtpPort"]);
+            _smtpUsername = _configuration["Email:Username"];
+            _smtpPassword = _configuration["Email:Password"];
+            _smtpFrom = _configuration["Email:From"];
         }
 
-        public async Task EnviarNotificacaoVencimentoAsync(int diasAntecedencia)
+        public async Task VerificarVencimentosAsync()
         {
-            var contratosVencendo = await _contratoRepository.GetVencendoEmAsync(diasAntecedencia);
+            using var scope = _scopeFactory.CreateScope();
+            var contratoRepository = scope.ServiceProvider.GetRequiredService<IContratoRepository>();
+
+            var contratos = await contratoRepository.GetAllWithOperadoraAsync();
+            var dataLimite = DateTime.Now.AddDays(5);
+
+            var contratosVencendo = contratos.Where(c =>
+                c.Status == StatusContrato.Ativo &&
+                c.DataVencimento <= dataLimite &&
+                c.DataVencimento > DateTime.Now);
 
             foreach (var contrato in contratosVencendo)
             {
-                // TODO: Implementar lógica de envio de e-mail
-                // Por enquanto, apenas logamos a informação
-                System.Diagnostics.Debug.WriteLine(
-                    $"Notificação: Contrato {contrato.Id} da filial {contrato.NomeFilial} vence em {diasAntecedencia} dias.");
+                var diasParaVencimento = (contrato.DataVencimento - DateTime.Now).Days;
+                var mensagem = $"O contrato da filial {contrato.NomeFilial} com a operadora {contrato.Operadora.Nome} " +
+                             $"vencerá em {diasParaVencimento} dias. Data de vencimento: {contrato.DataVencimento:dd/MM/yyyy}";
+
+                await EnviarEmailAsync(
+                    contrato.Operadora.ContatoSuporte,
+                    "Alerta de Vencimento de Contrato",
+                    mensagem);
             }
         }
 
-        public async Task EnviarNotificacaoFaturaAtrasadaAsync()
+        public async Task EnviarEmailAsync(string destinatario, string assunto, string mensagem)
         {
-            var faturasAtrasadas = await _faturaRepository.GetByStatusAsync(Core.Entities.StatusFatura.Atrasada);
-
-            foreach (var fatura in faturasAtrasadas)
+            using var client = new SmtpClient(_smtpServer, _smtpPort)
             {
-                // TODO: Implementar lógica de envio de e-mail
-                // Por enquanto, apenas logamos a informação
-                System.Diagnostics.Debug.WriteLine(
-                    $"Notificação: Fatura {fatura.Id} do contrato {fatura.ContratoId} está atrasada.");
-            }
+                EnableSsl = true,
+                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword)
+            };
+
+            using var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpFrom),
+                Subject = assunto,
+                Body = mensagem,
+                IsBodyHtml = false
+            };
+
+            mailMessage.To.Add(destinatario);
+
+            await client.SendMailAsync(mailMessage);
         }
     }
-} 
+}
