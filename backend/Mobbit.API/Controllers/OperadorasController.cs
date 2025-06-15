@@ -3,6 +3,7 @@ using Mobbit.Core.Entities;
 using Mobbit.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Mobbit.API.Controllers
 {
@@ -18,9 +19,20 @@ namespace Mobbit.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Operadora>>> GetOperadoras()
+        public async Task<ActionResult<IEnumerable<Operadora>>> GetOperadoras([FromQuery] TipoServico? tipoServico, [FromQuery] bool? ativas)
         {
             var operadoras = await _operadoraRepository.GetAllAsync();
+
+            if (tipoServico.HasValue && tipoServico.Value != TipoServico.None)
+            {
+                operadoras = operadoras.Where(o => (o.TipoServico & tipoServico.Value) == tipoServico.Value).ToList();
+            }
+
+            if (ativas.HasValue && ativas.Value)
+            {
+                operadoras = operadoras.Where(o => o.Ativo).ToList();
+            }
+
             return Ok(operadoras);
         }
 
@@ -52,6 +64,11 @@ namespace Mobbit.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Operadora>> CreateOperadora(Operadora operadora)
         {
+            if (await _operadoraRepository.ExistsByCnpjAsync(operadora.Cnpj))
+            {
+                return BadRequest("Já existe uma operadora com este CNPJ.");
+            }
+
             operadora.DataCadastro = System.DateTime.Now;
             operadora.Ativo = true;
             await _operadoraRepository.AddAsync(operadora);
@@ -66,13 +83,33 @@ namespace Mobbit.API.Controllers
                 return BadRequest();
             }
 
+            if (await _operadoraRepository.ExistsByCnpjAsync(operadora.Cnpj, operadora.Id))
+            {
+                return BadRequest("Já existe uma operadora com este CNPJ.");
+            }
+
             var operadoraExistente = await _operadoraRepository.GetByIdAsync(id);
             if (operadoraExistente == null)
             {
                 return NotFound();
             }
 
-            await _operadoraRepository.UpdateAsync(operadora);
+            if (operadoraExistente.Ativo && !operadora.Ativo)
+            {
+                var hasActiveContratos = await _operadoraRepository.HasActiveContratosAsync(id);
+                if (hasActiveContratos)
+                {
+                    return BadRequest(new { message = "Não é possível inativar a operadora pois existem contratos ATIVOS vinculados a ela." });
+                }
+            }
+
+            operadoraExistente.Nome = operadora.Nome;
+            operadoraExistente.Cnpj = operadora.Cnpj;
+            operadoraExistente.TipoServico = operadora.TipoServico;
+            operadoraExistente.ContatoSuporte = operadora.ContatoSuporte;
+            operadoraExistente.Ativo = operadora.Ativo;
+
+            await _operadoraRepository.UpdateAsync(operadoraExistente);
             return NoContent();
         }
 
@@ -85,8 +122,14 @@ namespace Mobbit.API.Controllers
                 return NotFound();
             }
 
+            var hasActiveContratos = await _operadoraRepository.HasActiveContratosAsync(id);
+            if (hasActiveContratos)
+            {
+                return BadRequest(new { message = "Não é possível excluir a operadora pois existem contratos ATIVOS vinculados a ela." });
+            }
+
             await _operadoraRepository.DeleteAsync(operadora);
             return NoContent();
         }
     }
-} 
+}

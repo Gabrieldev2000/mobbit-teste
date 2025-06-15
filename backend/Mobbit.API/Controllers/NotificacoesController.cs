@@ -16,17 +16,27 @@ namespace Mobbit.API.Controllers
         }
 
         [HttpPost("verificar-vencimentos")]
-        public async Task<IActionResult> VerificarVencimentos([FromQuery] int diasAntecedencia = 5)
+        public async Task<IActionResult> VerificarVencimentos()
         {
-            await _notificacaoService.EnviarNotificacaoVencimentoAsync(diasAntecedencia);
-            return Ok(new { message = "Verificação de vencimentos iniciada com sucesso." });
+            await _notificacaoService.VerificarVencimentosAsync();
+            return Ok("Verificação de vencimentos iniciada.");
         }
 
-        [HttpPost("verificar-faturas-atrasadas")]
-        public async Task<IActionResult> VerificarFaturasAtrasadas()
+        [HttpPost("enviar-email")]
+        public async Task<IActionResult> EnviarEmail([FromBody] EmailRequest request)
         {
-            await _notificacaoService.EnviarNotificacaoFaturaAtrasadaAsync();
-            return Ok(new { message = "Verificação de faturas atrasadas iniciada com sucesso." });
+            await _notificacaoService.EnviarEmailAsync(
+                request.Destinatario,
+                request.Assunto,
+                request.Mensagem);
+            return Ok("E-mail enviado com sucesso.");
         }
     }
-} 
+
+    public class EmailRequest
+    {
+        public string Destinatario { get; set; }
+        public string Assunto { get; set; }
+        public string Mensagem { get; set; }
+    }
+}

@@ -2,8 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Mobbit.API.Extensions;
 using Mobbit.API.Services;
+using Mobbit.Core.Interfaces;
 using Mobbit.Infrastructure.Data;
+using Mobbit.Infrastructure.Repositories;
+using Mobbit.Infrastructure.Services;
 using System.Reflection;
+
+// Configuração para lidar com datas no PostgreSQL
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +39,10 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+// Configuração do PostgreSQL
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Configuração dos serviços da aplicação
 builder.Services.AddApplicationServices(builder.Configuration);
 
@@ -47,6 +57,15 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
+
+// Registro dos Repositories
+builder.Services.AddScoped<IOperadoraRepository, OperadoraRepository>();
+builder.Services.AddScoped<IContratoRepository, ContratoRepository>();
+builder.Services.AddScoped<IFaturaRepository, FaturaRepository>();
+
+// Registro dos Services
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddSingleton<INotificacaoService, NotificacaoService>();
 
 // Configuração do serviço de background
 builder.Services.AddHostedService<NotificacaoBackgroundService>();

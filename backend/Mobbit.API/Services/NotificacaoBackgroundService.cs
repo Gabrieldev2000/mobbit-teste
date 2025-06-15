@@ -1,25 +1,24 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Mobbit.Core.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Mobbit.Core.Interfaces;
 
 namespace Mobbit.API.Services
 {
     public class NotificacaoBackgroundService : BackgroundService
     {
         private readonly ILogger<NotificacaoBackgroundService> _logger;
-        private readonly IServiceScopeFactory _scopeFactory;
-        private readonly TimeSpan _intervalo = TimeSpan.FromHours(24);
+        private readonly INotificacaoService _notificacaoService;
+        private readonly TimeSpan _intervalo = TimeSpan.FromSeconds(5);
 
         public NotificacaoBackgroundService(
             ILogger<NotificacaoBackgroundService> logger,
-            IServiceScopeFactory scopeFactory)
+            INotificacaoService notificacaoService)
         {
             _logger = logger;
-            _scopeFactory = scopeFactory;
+            _notificacaoService = notificacaoService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,28 +27,17 @@ namespace Mobbit.API.Services
             {
                 try
                 {
-                    _logger.LogInformation("Iniciando verificação de notificações...");
-
-                    using (var scope = _scopeFactory.CreateScope())
-                    {
-                        var notificacaoService = scope.ServiceProvider.GetRequiredService<INotificacaoService>();
-
-                        // Verifica contratos vencendo em 5 dias
-                        await notificacaoService.EnviarNotificacaoVencimentoAsync(5);
-
-                        // Verifica faturas atrasadas
-                        await notificacaoService.EnviarNotificacaoFaturaAtrasadaAsync();
-                    }
-
-                    _logger.LogInformation("Verificação de notificações concluída.");
+                    _logger.LogInformation("Iniciando verificação de vencimentos...");
+                    await _notificacaoService.VerificarVencimentosAsync();
+                    _logger.LogInformation("Verificação de vencimentos concluída.");
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Erro ao executar verificação de notificações.");
+                    _logger.LogError(ex, "Erro ao verificar vencimentos.");
                 }
 
                 await Task.Delay(_intervalo, stoppingToken);
             }
         }
     }
-} 
+}

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Mobbit.Core.DTOs;
 using Mobbit.Core.Entities;
 using Mobbit.Core.Interfaces;
 using System;
@@ -21,14 +22,14 @@ namespace Mobbit.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Fatura>>> GetFaturas()
         {
-            var faturas = await _faturaRepository.GetAllAsync();
+            var faturas = await _faturaRepository.GetAllWithContratoAsync();
             return Ok(faturas);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Fatura>> GetFatura(int id)
         {
-            var fatura = await _faturaRepository.GetByIdAsync(id);
+            var fatura = await _faturaRepository.GetByIdWithContratoAsync(id);
             if (fatura == null)
             {
                 return NotFound();
@@ -74,17 +75,25 @@ namespace Mobbit.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Fatura>> CreateFatura(Fatura fatura)
+        public async Task<ActionResult<Fatura>> CreateFatura(FaturaDTO faturaDTO)
         {
-            fatura.Status = StatusFatura.Pendente;
+            var fatura = new Fatura
+            {
+                ContratoId = faturaDTO.ContratoId,
+                DataEmissao = faturaDTO.DataEmissao,
+                DataVencimento = faturaDTO.DataVencimento,
+                ValorCobrado = faturaDTO.ValorCobrado,
+                Status = StatusFatura.PENDENTE
+            };
+
             await _faturaRepository.AddAsync(fatura);
             return CreatedAtAction(nameof(GetFatura), new { id = fatura.Id }, fatura);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFatura(int id, Fatura fatura)
+        public async Task<IActionResult> UpdateFatura(int id, FaturaUpdateDTO faturaDTO)
         {
-            if (id != fatura.Id)
+            if (id != faturaDTO.Id)
             {
                 return BadRequest();
             }
@@ -95,12 +104,22 @@ namespace Mobbit.API.Controllers
                 return NotFound();
             }
 
-            if (fatura.Status == StatusFatura.Paga && faturaExistente.Status != StatusFatura.Paga)
+            faturaExistente.ContratoId = faturaDTO.ContratoId;
+            faturaExistente.DataEmissao = faturaDTO.DataEmissao;
+            faturaExistente.DataVencimento = faturaDTO.DataVencimento;
+            faturaExistente.ValorCobrado = faturaDTO.ValorCobrado;
+
+            if (faturaDTO.Status == StatusFatura.PAGA && faturaExistente.Status != StatusFatura.PAGA)
             {
-                fatura.DataPagamento = DateTime.Now;
+                faturaExistente.Status = faturaDTO.Status;
+                faturaExistente.DataPagamento = DateTime.Now;
+            }
+            else
+            {
+                faturaExistente.Status = faturaDTO.Status;
             }
 
-            await _faturaRepository.UpdateAsync(fatura);
+            await _faturaRepository.UpdateAsync(faturaExistente);
             return NoContent();
         }
 
@@ -117,4 +136,4 @@ namespace Mobbit.API.Controllers
             return NoContent();
         }
     }
-} 
+}

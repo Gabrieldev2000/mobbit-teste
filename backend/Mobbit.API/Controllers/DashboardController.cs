@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Mobbit.Core.DTOs;
 using Mobbit.Core.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace Mobbit.API.Controllers
@@ -16,32 +16,25 @@ namespace Mobbit.API.Controllers
             _dashboardService = dashboardService;
         }
 
-        [HttpGet("distribuicao-faturas")]
-        public async Task<IActionResult> GetDistribuicaoFaturas()
+        [HttpGet("distribuicao-status")]
+        public async Task<ActionResult<IEnumerable<DashboardDTO.DistribuicaoStatus>>> GetDistribuicaoStatus()
         {
-            var distribuicao = await _dashboardService.GetDistribuicaoFaturasAsync();
+            var distribuicao = await _dashboardService.GetDistribuicaoStatusAsync();
             return Ok(distribuicao);
         }
 
         [HttpGet("evolucao-mensal")]
-        public async Task<IActionResult> GetEvolucaoMensal([FromQuery] int meses = 12)
+        public async Task<ActionResult<IEnumerable<DashboardDTO.EvolucaoMensal>>> GetEvolucaoMensal([FromQuery] int meses = 12)
         {
             var evolucao = await _dashboardService.GetEvolucaoMensalAsync(meses);
             return Ok(evolucao);
         }
 
-        [HttpGet("total-faturado")]
-        public async Task<IActionResult> GetTotalFaturado([FromQuery] DateTime mes)
+        [HttpGet("totais")]
+        public async Task<ActionResult<DashboardDTO.Totais>> GetTotais()
         {
-            var total = await _dashboardService.GetTotalFaturadoAsync(mes);
-            return Ok(total);
-        }
-
-        [HttpGet("total-faturas")]
-        public async Task<IActionResult> GetTotalFaturas([FromQuery] DateTime mes)
-        {
-            var total = await _dashboardService.GetTotalFaturasAsync(mes);
-            return Ok(total);
+            var totais = await _dashboardService.GetTotaisAsync();
+            return Ok(totais);
         }
     }
-} 
+}
