@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { ConfirmarExclusaoDialogComponent } from '../../operadoras/confirmar-exclusao-dialog.component';
+import { ConfirmarExclusaoContratoDialogComponent } from '../confirmar-exclusao-dialog.component';
 
 @Component({
   selector: 'app-contrato-list',
@@ -104,7 +104,7 @@ export class ContratoListComponent implements OnInit {
   }
 
   excluirContrato(contrato: Contrato): void {
-    const dialogRef = this.dialog.open(ConfirmarExclusaoDialogComponent, {
+    const dialogRef = this.dialog.open(ConfirmarExclusaoContratoDialogComponent, {
       data: { nome: `${contrato.planoContratado} (${contrato.nomeFilial})` },
       width: '400px',
       disableClose: true,
@@ -123,27 +123,26 @@ export class ContratoListComponent implements OnInit {
             },
             error: (error) => {
               let mensagemParaExibir = 'Erro ao excluir contrato';
-              let backendResponseError: any = error.error;
 
-              if (error instanceof SyntaxError) {
-                mensagemParaExibir = "Não é possível excluir o contrato.";
-              } else if (backendResponseError) {
-                if (typeof backendResponseError === 'string') {
+              if (error.status === 500) {
+                mensagemParaExibir = "Não é possível excluir o contrato pois existem faturas vinculadas a ele.";
+              } else if (error instanceof SyntaxError) {
+                mensagemParaExibir = "Não é possível excluir o contrato pois existem faturas vinculadas a ele.";
+              } else if (error.error) {
+                if (typeof error.error === 'string') {
                   try {
-                    const parsed = JSON.parse(backendResponseError);
+                    const parsed = JSON.parse(error.error);
                     if (parsed && parsed.message) {
                       mensagemParaExibir = parsed.message;
                     }
                   } catch (e) {
-                    mensagemParaExibir = backendResponseError;
+                    mensagemParaExibir = "Não é possível excluir o contrato pois existem faturas vinculadas a ele.";
                   }
-                } else if (backendResponseError.message) {
-                  mensagemParaExibir = backendResponseError.message;
+                } else if (error.error.message) {
+                  mensagemParaExibir = error.error.message;
                 } else {
-                  mensagemParaExibir = JSON.stringify(backendResponseError);
+                  mensagemParaExibir = "Não é possível excluir o contrato pois existem faturas vinculadas a ele.";
                 }
-              } else if (error.message) {
-                mensagemParaExibir = error.message;
               }
 
               this.snackBar.open(mensagemParaExibir, 'Fechar', {

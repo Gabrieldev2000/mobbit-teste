@@ -11,7 +11,7 @@ namespace Mobbit.API.Services
     {
         private readonly ILogger<NotificacaoBackgroundService> _logger;
         private readonly INotificacaoService _notificacaoService;
-        private readonly TimeSpan _intervalo = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan _intervalo = TimeSpan.FromSeconds(60);
 
         public NotificacaoBackgroundService(
             ILogger<NotificacaoBackgroundService> logger,

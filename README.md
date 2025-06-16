@@ -171,6 +171,16 @@ mobbit-teste/
    - Delete a pasta `node_modules` e execute `npm install` novamente
    - Verifique se o backend está rodando
 
+## Observações
+
+     para ajustar o tempo de envio de email para contratos perto do vencimento:
+     pequise por esta linha:
+                     private readonly TimeSpan _intervalo = TimeSpan.FromSeconds(60);
+     nela podemos ajussa para a cada 24 - deixei co 5 segundos apenas para validação da funcionalidade tanto minha quanto de quem esta testando o software.
+
+     exemplo 24 horas:  private readonly TimeSpan _intervalo = TimeSpan.FromHours(24);
+
+
 ## Suporte
 
 Para suporte ou dúvidas, abra uma issue no repositório.
