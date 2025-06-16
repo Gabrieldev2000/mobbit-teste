@@ -40,8 +40,16 @@ O projeto utiliza arquivos de configuração que não são versionados por quest
     "Username": "seu_email@dominio.com",
     "Password": "sua_senha",
     "From": "seu_email@dominio.com"
-  }
+},
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
 }
+
 ```
 
 **Frontend:**
