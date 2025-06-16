@@ -35,6 +35,9 @@ nupkg/
 **/appsettings.Local.json
 *.Development.json
 *.Local.json
+backend/Mobbit.API/appsettings.json
+backend/Mobbit.API/appsettings.Development.json
+backend/Mobbit.API/appsettings.Local.json
 
 # Arquivos de Banco de Dados
 *.mdf
