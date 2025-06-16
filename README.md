@@ -99,8 +99,7 @@ dotnet run
 ```
 
 O backend estará disponível em:
-- HTTPS: https://localhost:7082
-- HTTP: http://localhost:5253
+- HTTP: http://localhost:5024
 
 ### 4. Executando o Frontend
 
@@ -180,7 +179,7 @@ mobbit-teste/
 
      exemplo 24 horas:  private readonly TimeSpan _intervalo = TimeSpan.FromHours(24);
 
-     Para o dashboard mostrar os graficos deve ter pelo menos uma fatura, então devemos criar uma operadora, um contrato e ai sim uma fatura. Consequentemente os graficos vão aparecer. 
+     Para o dashboard mostrar os graficos deve ter pelo menos uma fatura, então devemos criar uma operadora, um contrato e ai sim uma fatura. Consequentemente os graficos vão aparecer.
 
 
 
