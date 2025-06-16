@@ -20,31 +20,20 @@ git clone [URL_DO_REPOSITÓRIO]
 cd mobbit-teste
 ```
 
-### 2. Configuração do Backend
+### 2. Configuração de Ambiente
 
-#### 2.1 Configuração do Banco de Dados
+#### 2.1 Arquivos de Configuração
 
-Você tem duas opções para configurar o banco de dados:
+O projeto utiliza arquivos de configuração que não são versionados por questões de segurança. Você precisará criar os seguintes arquivos:
 
-**Opção 1 - PostgreSQL Local:**
-1. Instale o PostgreSQL em sua máquina
-2. Crie um banco de dados chamado `mobbit`
-3. Configure a string de conexão no arquivo `backend/Mobbit.API/appsettings.json`:
+**Backend:**
+1. Crie um arquivo `backend/Mobbit.API/appsettings.json` com as configurações do banco de dados e e-mail:
 
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Database=mobbit;Username=seu_usuario;Password=sua_senha"
-  }
-}
-```
-
-#### 2.2 Configuração do Serviço de Notificações
-
-Para que o serviço de notificações funcione corretamente, configure o envio de e-mails no arquivo `backend/Mobbit.API/appsettings.json`:
-
-```json
-{
+  },
   "Email": {
     "SmtpServer": "smtp.seu_servidor.com",
     "SmtpPort": 587,
@@ -55,12 +44,44 @@ Para que o serviço de notificações funcione corretamente, configure o envio d
 }
 ```
 
+**Frontend:**
+1. Crie um arquivo `frontend/src/environments/environment.ts`:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:5253' // URL do backend
+};
+```
+
+2. Crie um arquivo `frontend/src/environments/environment.prod.ts`:
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://sua-api-producao.com' // URL do backend em produção
+};
+```
+
+**Nota:** Estes arquivos são ignorados pelo `.gitignore` por conterem informações sensíveis. Cada desenvolvedor deve criar seus próprios arquivos de configuração localmente.
+
+#### 2.2 Configuração do Banco de Dados
+
+**PostgreSQL Local:**
+1. Instale o PostgreSQL em sua máquina
+2. Crie um banco de dados chamado `mobbit`
+3. Configure a string de conexão no arquivo `appsettings.json` conforme mostrado acima
+
+#### 2.3 Configuração do Serviço de Notificações
+
+Para que o serviço de notificações funcione corretamente, configure o envio de e-mails no arquivo `appsettings.json` conforme mostrado acima.
+
 **Nota:** Se estiver usando Gmail:
 - Ative a verificação em duas etapas
 - Gere uma senha de app específica
 - Use essa senha no campo `Password`
 
-#### 2.3 Executando o Backend
+### 3. Executando o Backend
 
 ```bash
 cd backend/Mobbit.API
@@ -73,7 +94,7 @@ O backend estará disponível em:
 - HTTPS: https://localhost:7082
 - HTTP: http://localhost:5253
 
-### 3. Configuração do Frontend
+### 4. Executando o Frontend
 
 ```bash
 cd frontend

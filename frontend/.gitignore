@@ -1,4 +1,4 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
 /dist
@@ -40,3 +40,26 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Arquivos de Configuração Local
+src/environments/environment.ts
+src/environments/environment.prod.ts
+src/environments/environment.development.ts
+src/environments/environment.local.ts
+
+# Arquivos de Ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos de Log
+*.log
+logs/
+Logs/
+
+# Arquivos de Cache
+*.cache
+*.temp
+*.tmp

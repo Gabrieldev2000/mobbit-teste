@@ -1,6 +1,6 @@
 # Arquivos de build do .NET
-bin/
-obj/
+**/bin/
+**/obj/
 *.dll
 *.exe
 *.pdb
@@ -20,19 +20,19 @@ project.lock.json
 nupkg/
 
 # Arquivos de Teste
-TestResults/
-[Tt]est[Rr]esult*/
+**/TestResults/
+**/[Tt]est[Rr]esult*/
 *.trx
 
 # Arquivos de Log
 *.log
-logs/
-Logs/
+**/logs/
+**/Logs/
 
 # Arquivos de Configuração Local
-appsettings.json
-appsettings.Development.json
-appsettings.Local.json
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Local.json
 *.Development.json
 *.Local.json
 
@@ -48,7 +48,7 @@ appsettings.Local.json
 
 # Arquivos de Documentação
 *.xml
-!Mobbit.API.xml
+!**/Mobbit.API.xml
 
 # Arquivos de Ambiente
 .env
@@ -99,7 +99,7 @@ appsettings.Local.json
 *.scc
 
 # Arquivos de NuGet
-packages/
+**/packages/
 *.nupkg
 *.snupkg
 **/packages/*
@@ -107,16 +107,20 @@ packages/
 *.nuget.props
 *.nuget.targets
 
-# Arquivos de Node.js (caso use no frontend)
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Node.js e Angular
+**/node_modules/
+**/npm-debug.log
+**/yarn-debug.log
+**/yarn-error.log
+**/dist/
+**/tmp/
+**/.angular/
 
 # Arquivos de TypeScript
 *.tsbuildinfo
 
-# Arquivos de Angular (caso use no frontend)
-dist/
-tmp/
-.angular/
+# Arquivos de Configuração do Frontend
+**/src/environments/environment.ts
+**/src/environments/environment.prod.ts
+**/src/environments/environment.development.ts
+**/src/environments/environment.local.ts
