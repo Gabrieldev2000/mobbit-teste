@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-grid-list cols="4" rowHeight="100px" gutterSize="16px">
+  <mat-grid-list cols="3" rowHeight="100px" gutterSize="16px">
     <!-- Total de Faturas -->
     <mat-grid-tile>
       <mat-card class="dashboard-card">
@@ -14,34 +14,6 @@
       </mat-card>
     </mat-grid-tile>
 
-    <!-- Total de Contratos -->
-    <mat-grid-tile>
-      <mat-card class="dashboard-card">
-        <mat-card-content>
-          <div class="card-content">
-            <div class="card-info">
-              <span class="card-title">Total de Contratos</span>
-              <span class="card-value">{{carregando ? '...' : totalContratos}}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
-    <!-- Total de Operadoras -->
-    <mat-grid-tile>
-      <mat-card class="dashboard-card">
-        <mat-card-content>
-          <div class="card-content">
-            <div class="card-info">
-              <span class="card-title">Total de Operadoras</span>
-              <span class="card-value">{{carregando ? '...' : totalOperadoras}}</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
     <!-- Faturas Pendentes -->
     <mat-grid-tile>
       <mat-card class="dashboard-card">
@@ -50,6 +22,20 @@
             <div class="card-info">
               <span class="card-title">Faturas Pendentes</span>
               <span class="card-value">{{carregando ? '...' : faturasPendentes}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- Faturas Pagas -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-content>
+          <div class="card-content">
+            <div class="card-info">
+              <span class="card-title">Total De Faturas Pagas</span>
+              <span class="card-value">{{carregando ? '...' : valorTotalPendente | currency:'BRL'}}</span>
             </div>
           </div>
         </mat-card-content>

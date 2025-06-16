@@ -43,7 +43,7 @@ namespace Mobbit.Infrastructure.Services
                 {
                     Mes = $"{g.Key.Year}/{g.Key.Month:D2}",
                     FaturasEmitidas = g.Count(),
-                    FaturasPagas = g.Count(f => (int)f.Status == 0),
+                    FaturasPagas = g.Count(f => f.Status == StatusFatura.PAGA),
                     ValorTotal = g.Sum(f => f.ValorCobrado)
                 })
                 .OrderBy(x => x.Mes);
@@ -60,6 +60,12 @@ namespace Mobbit.Infrastructure.Services
                 FaturasPendentes = faturas.Count(f => f.Status == StatusFatura.PENDENTE),
                 FaturasAtrasadas = faturas.Count(f => f.Status == StatusFatura.ATRASADA)
             };
+        }
+
+        public async Task<decimal> GetTotalFaturasPagasAsync()
+        {
+            var faturasPagas = await _faturaRepository.GetByStatusAsync(StatusFatura.PAGA);
+            return faturasPagas.Sum(f => f.ValorCobrado);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace Mobbit.Core.Interfaces
         Task<IEnumerable<DashboardDTO.DistribuicaoStatus>> GetDistribuicaoStatusAsync();
         Task<IEnumerable<DashboardDTO.EvolucaoMensal>> GetEvolucaoMensalAsync(int meses = 12);
         Task<DashboardDTO.Totais> GetTotaisAsync();
+        Task<decimal> GetTotalFaturasPagasAsync();
     }
 }

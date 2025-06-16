@@ -57,8 +57,23 @@ table {
   display: flex;
   gap: 8px;
 
-  button {
-    min-width: 80px;
+  button.mat-mdc-icon-button {
+    min-width: 0 !important; /* Força o tamanho mínimo para zero */
+    padding: 0 !important;   /* Remove qualquer padding */
+    background: transparent !important; /* Remove o fundo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* Tamanho padrão de um mat-icon-button, pode ajustar */
+    width: 40px;  /* Para garantir que seja quadrado/circular */
+  }
+
+  button[routerlink] mat-icon svg path {
+    fill: #000000; /* Cor preta para o ícone de editar */
+  }
+
+  button[color="warn"] mat-icon svg path {
+    fill: #EA3323; /* Cor vermelha para o ícone de deletar */
   }
 }
 

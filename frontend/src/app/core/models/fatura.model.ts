@@ -1,5 +1,5 @@
 import { Contrato } from './contrato.model';
-import { StatusFatura } from '../constants/status.constants';
+import { StatusFatura } from '../../constants/status.constants';
 
 export interface Fatura {
   id: number;
