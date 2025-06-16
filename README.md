@@ -176,11 +176,58 @@ mobbit-teste/
      para ajustar o tempo de envio de email para contratos perto do vencimento:
      pequise por esta linha:
                      private readonly TimeSpan _intervalo = TimeSpan.FromSeconds(60);
-     nela podemos ajussa para a cada 24 - deixei co 5 segundos apenas para validação da funcionalidade tanto minha quanto de quem esta testando o software.
+     nela podemos ajustar para a cada 24 - deixei com 60 segundos apenas para validação da funcionalidade tanto minha quanto de quem esta testando o software.
 
      exemplo 24 horas:  private readonly TimeSpan _intervalo = TimeSpan.FromHours(24);
 
 
-## Suporte
 
-Para suporte ou dúvidas, abra uma issue no repositório.
+## Arquitetura e Regras de Negócio
+
+### Arquitetura do Backend
+
+O backend foi desenvolvido seguindo os princípios SOLID e utilizando uma arquitetura em camadas:
+
+1. **Arquitetura em Camadas**
+   - **Mobbit.API**: Camada de apresentação, responsável pelos endpoints HTTP
+   - **Mobbit.Core**: Camada de domínio, contém as entidades e interfaces
+   - **Mobbit.Infrastructure**: Camada de infraestrutura, implementações concretas
+
+2. **Princípios SOLID Aplicados**
+   - **Single Responsibility**: Cada classe tem uma única responsabilidade
+   - **Open/Closed**: Extensível para novas funcionalidades sem modificar código existente
+   - **Liskov Substitution**: Interfaces bem definidas permitem substituição de implementações
+   - **Interface Segregation**: Interfaces específicas para cada necessidade
+   - **Dependency Inversion**: Dependências injetadas via construtor
+
+3. **Padrões de Projeto Utilizados**
+   - Repository Pattern
+   - Unit of Work
+   - Dependency Injection
+   - Factory Pattern
+   - Observer Pattern (para notificações)
+
+### Regras de Negócio
+
+1. **Contratos**
+   - Não é possível excluir um contrato que possui faturas vinculadas
+   - Um contrato só pode ser vinculado a uma operadora ativa
+   - O valor mensal do contrato deve ser maior que zero
+
+2. **Faturas**
+   - Faturas só podem ser vinculadas a contratos ativos
+   - Faturas vencidas são automaticamente marcadas como atrasadas
+
+3. **Operadoras**
+   - Não é possível excluir uma operadora que possui contratos ativos
+   - CNPJ da operadora deve ser único no sistema
+   - Operadora deve ter pelo menos um contato de suporte cadastrado
+
+4. **Notificações**
+   - E-mails são enviados para contratos próximos do vencimento (5 dias)
+   - Notificações são enviadas apenas para contratos ativos
+   - O sistema mantém um log de todas as notificações enviadas
+
+
+6. **Segurança**
+   - Todas as operações são validadas no backend
