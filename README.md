@@ -180,6 +180,8 @@ mobbit-teste/
 
      exemplo 24 horas:  private readonly TimeSpan _intervalo = TimeSpan.FromHours(24);
 
+     Para o dashboard mostrar os graficos deve ter pelo menos uma fatura, então devemos criar uma operadora, um contrato e ai sim uma fatura. Consequentemente os graficos vão aparecer. 
+
 
 
 ## Arquitetura e Regras de Negócio
